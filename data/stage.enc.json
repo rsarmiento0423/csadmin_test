@@ -1,0 +1,24 @@
+{
+	"superusername": "ENC[AES256_GCM,data:wP0RWP++3DDbbeW3ubwQmyy/3BL1n4xL10hCzaWtc/1G8Uw=,iv:IIWcYoCfsVcZOsySWezQar5pX4Bfw/6lH7xoKrWmUXE=,tag:LgKQLw0rglvdEIsYjD5rNQ==,type:str]",
+	"superpassword": "ENC[AES256_GCM,data:hTXtO4X8z7M6HhxVvktTujU=,iv:slpp1fYmrTB3yWzDX+zAkozgxzVvMhn52ufjJ/5TO4M=,tag:qYbxnXPM8fsN0HTuqYNY2w==,type:str]",
+	"usernopermission": "ENC[AES256_GCM,data:89zsNFYSHrWXXKgiMUu6BO8j6D0tmQUYJCquSLDeDkDnWg==,iv:w+57eLPSyXk9oSBG5BTjGE2OMq49xAgoJViJoBNk0is=,tag:wO1SrcaPFKBrJ1DzbYNFtA==,type:str]",
+	"passwordopermission": "ENC[AES256_GCM,data:2jfFUM0Bua2zCJK2qYVaLAg=,iv:ziJsjiIqrakjaMww1DsgqOYAwr2M8zckoX1+1cB2KlI=,tag:jDJIy3AgN6pK/Gu7EEOTPw==,type:str]",
+	"sops": {
+		"kms": null,
+		"gcp_kms": [
+			{
+				"resource_id": "projects/onec-stage/locations/global/keyRings/sops-staging-keyring/cryptoKeys/sops-staging-cryptokey",
+				"created_at": "2022-12-23T20:45:26Z",
+				"enc": "CiQAtlJF6cGsfqjoTfas3AqvEe+nGPtWI2ZBN45MhKQ41Ccw2cASSAD97cc+3fNOgS66sSTGauseMTjhyZOOSUZ6bvjheFcP8GJ0DlRjRnsXj6ZdeS1P+TgcDrawqVb4kgBRMRDnOLClU2I8cT7ejw=="
+			}
+		],
+		"azure_kv": null,
+		"hc_vault": null,
+		"age": null,
+		"lastmodified": "2022-12-23T20:45:26Z",
+		"mac": "ENC[AES256_GCM,data:w9IaZod/v0KAeCwauS+bIxDbkRTeRTsZdDgjG+fiNK+7hAewvM7tKJXy8BaBomzL2m+kvvm/ismEfzyYWk4QGv10JR8kH0hHb4IWh+jKtP798rbZEp7iBQfWukiUulnAIpVcIDH8w6FWlKiuq1nP7QUOfoPI8uP725KAu7iZZpI=,iv:hhbP+O6Ph3196i2qd8tdV/6EUBQGkoOR49O75ad+3Ts=,tag:Y4oNiGK/FON4KjelH5QuZg==,type:str]",
+		"pgp": null,
+		"unencrypted_suffix": "_unencrypted",
+		"version": "3.7.1"
+	}
+}

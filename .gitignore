@@ -1,0 +1,9 @@
+libs/pages/__pycache__/
+data/stage.json
+data/prod.json
+.DS_Store
+venv/
+pabot_results/
+*.png
+*.xml
+*.html

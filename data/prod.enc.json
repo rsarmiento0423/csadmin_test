@@ -1,0 +1,24 @@
+{
+	"superusername": "ENC[AES256_GCM,data:1ucMaWM7pwFRyiCkRPHujiiNV1LllkI/BoCQEUKlGGID,iv:Xz72fONOwAsexrDLCwLA62a4uPZAiQ0/UJmHE+iiAgI=,tag:Xlc0LkWHyqdm1762HrbohQ==,type:str]",
+	"superpassword": "ENC[AES256_GCM,data:HsPa5wb1Jdzb4y12gX9fyd8=,iv:hJjdEQQA+nS+RECYX78mm8K4sadCqTfe5pCp/+Aqmz4=,tag:e34Z0Z5yetVUUGT06BNDMw==,type:str]",
+	"usernopermission": "ENC[AES256_GCM,data:N7jdR50usrKIgBjPlOigXAmN5Oc8IM2B6QvuhWbMc5e6LKfUiYwBXA==,iv:XJV+HLC9l8yy4EOrm7fZurBCT2J5XQ39INqU2UwN7nw=,tag:D2xE/D/OMqwhm4btP/vsHg==,type:str]",
+	"passwordopermission": "ENC[AES256_GCM,data:1ohv291N9tbodca6NlC9sUw=,iv:sm2WgTypDGXc4oARIqAg9c6fMnhkKs0uXUaY7eNC5GM=,tag:5d45js0lleNIYr6EXy3UYw==,type:str]",
+	"sops": {
+		"kms": null,
+		"gcp_kms": [
+			{
+				"resource_id": "projects/onec-prod/locations/global/keyRings/sops-prod-keyring/cryptoKeys/sops-prod-cryptokey",
+				"created_at": "2022-12-23T20:30:58Z",
+				"enc": "CiQAe4evQHFFzX7rMZh8wc77VRBK3Xr1FIwT15KrInk6mNmlkq0SSQDpggyRvLOgAw47qyP7N2vlbSDkIw40OIZhzfWKF4QABaAFOfpNUR5Gs4s3DleEYvoQtgwd5IasOWggxh3vSMflSIrBgy0TvXE="
+			}
+		],
+		"azure_kv": null,
+		"hc_vault": null,
+		"age": null,
+		"lastmodified": "2022-12-23T20:31:01Z",
+		"mac": "ENC[AES256_GCM,data:UYD0qx1JtxQlJ44rNt9mcxfATUOt3bAWzKreMcpkuMkIQ8KdfEqR9p0exxPwYNkCkFiGAq6P93lA/wdUuN5TCO6YUmUrCcH3CF2m919C0HXooQFUU9Vl3FUesw0f7XeE5Mpm0caoCIA0xl3Wh1yMatP4b8EYpPmVPjnugLmyx14=,iv:1NUsb2cRfsb8EhvxUPUTfQy+5vWKVfB912w890SxTTU=,tag:WjoTmpyh3y0TMVoqMytozg==,type:str]",
+		"pgp": null,
+		"unencrypted_suffix": "_unencrypted",
+		"version": "3.7.3"
+	}
+}

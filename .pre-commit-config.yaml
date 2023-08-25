@@ -1,0 +1,57 @@
+# See https://pre-commit.com for more information
+# See https://pre-commit.com/hooks.html for more hooks
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: 'v4.2.0'
+    hooks:
+      - id: trailing-whitespace
+        exclude: ^tests/
+      - id: end-of-file-fixer
+        exclude: |
+          (?x)(
+            ^\S*fixtures
+          )
+      - id: check-yaml
+        exclude: ^flood-ml-deployment/templates
+      - id: check-added-large-files
+        args: ["--maxkb", "4096"]
+      - id: requirements-txt-fixer
+  - repo: https://github.com/jumanjihouse/pre-commit-hooks
+    rev: '2.1.6'
+    hooks:
+      - id: shellcheck
+  - repo: https://github.com/pycqa/isort
+    rev: '5.10.1'
+    hooks:
+      - id: isort
+        args: ['--filter-files', "--profile", "black", "--indent", "    "]
+  - repo: https://github.com/myint/autoflake
+    rev: 'v1.4'
+    hooks:
+      - id: autoflake
+        # jake: commenting these args for now. Can be uncommented once we have run precommit on the codebase and the diff is smaller
+        # args: ['--remove-unused-variables', '--remove-all-unused-imports']
+  - repo: https://github.com/psf/black
+    rev: '22.3.0'
+    hooks:
+      - id: black
+        language_version: python3
+
+  # using local linter here because the pylint hook runs in a different venv and is not able to find imports
+  - repo: local
+    hooks:
+      - id: pylint
+        name: pylint
+        entry: bash -c 'pylint $(git diff --name-only --cached | grep .py)'
+        language: system
+        types: [python]
+      # - id: lint-argo
+      #   name: lint-argo
+      #   entry: make lint-argo
+      #   language: system
+      #   types: [yaml]
+      # - id: lint-helm
+      #   name: lint-helm
+      #   entry: make lint-helm
+      #   language: system
+      #   types: [yaml]

@@ -1,0 +1,178 @@
+version: 2.1
+orbs:
+  browser-tools: circleci/browser-tools@1.4.2
+  slack: circleci/slack@4.10.1
+jobs:
+  build-only:
+    working_directory: ~/circleci-robotframework
+    docker:
+      - image: circleci/python:3.10.1
+    steps:
+      - checkout
+      - run:
+          name: install python packages
+          command: pip3 install -r requirements.txt
+      - run:
+          name: lint
+          command: make lint
+  e2e-platform-smoke-test-staging:
+    working_directory: ~/circleci-robotframework
+    docker:
+      - image: circleci/python:3.10.1
+    steps:
+      - checkout
+      - browser-tools/install-browser-tools:
+          chrome-version: 114.0.5735.198
+      - run:
+          command: |
+            google-chrome --version
+            chromedriver --version
+      - run:
+          name: install python packages
+          command: |
+            pip3 install --upgrade pip
+            pip3 --version
+            pip3 install -r requirements.txt
+      - run:
+          name: lint
+          command: make lint
+      - run:
+          name: create results directory
+          command: mkdir -p ~/circleci-robotframework/results
+      - run:
+          name: download SOPS
+          command: |
+            curl -sLO https://github.com/mozilla/sops/releases/download/v3.7.1/sops_3.7.1_amd64.deb && \
+            sudo dpkg -i sops_3.7.1_amd64.deb
+            sops --version
+      - run:
+          name: Initialize
+          command: |
+            mkdir -p ~/circleci-robotframework/extra
+            echo $GCLOUD_SERVICE_KEY > $HOME/circleci-robotframework/extra/appcredentials.json
+            echo "export GOOGLE_APPLICATION_CREDENTIALS='$HOME/circleci-robotframework/extra/appcredentials.json'" >> $BASH_ENV
+      - run:
+          name: decrypt stage.enc.json
+          command: make decrypt_staging
+      - run:
+          name: execute platform staging smoke chrome tests
+          command: |
+            cd ~/circleci-robotframework
+            make chrome_staging_parallel
+          when: always
+      - run:
+          name: copy platform staging smoke test results
+          command: |
+            cp ~/circleci-robotframework/*.html ~/circleci-robotframework/results || true
+            cp ~/circleci-robotframework/*.xml ~/circleci-robotframework/results || true
+            cp ~/circleci-robotframework/*.png ~/circleci-robotframework/results || true
+          when: always
+      - store_artifacts:
+          path: ~/circleci-robotframework/results
+          when: always
+      - slack/notify:
+          channel: "test-channel"
+          branch_pattern: main
+          event: pass
+      - slack/notify:
+          channel: "test-job-failure"
+          branch_pattern: main
+          mentions: '@qa'
+          event: fail
+  e2e-platform-smoke-test-prod:
+    working_directory: ~/circleci-robotframework
+    docker:
+      - image: circleci/python:3.10.1
+    steps:
+      - checkout
+      - browser-tools/install-browser-tools:
+          chrome-version: 114.0.5735.198
+      - run:
+          command: |
+            google-chrome --version
+            chromedriver --version
+      - run:
+          name: install python packages
+          command: |
+            pip3 install --upgrade pip
+            pip3 --version
+            pip3 install -r requirements.txt
+      - run:
+          name: lint
+          command: make lint
+      - run:
+          name: create results directory
+          command: mkdir -p ~/circleci-robotframework/results
+      - run:
+          name: download SOPS
+          command: |
+            curl -sLO https://github.com/mozilla/sops/releases/download/v3.7.1/sops_3.7.1_amd64.deb && \
+            sudo dpkg -i sops_3.7.1_amd64.deb
+            sops --version
+      - run:
+          name: Initialize
+          command: |
+            mkdir -p ~/circleci-robotframework/extra
+            echo $GCLOUD_SERVICE_KEY > $HOME/circleci-robotframework/extra/appcredentials.json
+            echo "export GOOGLE_APPLICATION_CREDENTIALS='$HOME/circleci-robotframework/extra/appcredentials.json'" >> $BASH_ENV
+      - run:
+          name: decrypt prod.enc.json
+          command: make decrypt_prod
+      - run:
+          name: execute platform production smoke chrome tests
+          command: |
+            cd ~/circleci-robotframework
+            make chrome_prod_parallel
+          when: always
+      - run:
+          name: copy platform production smoke test results
+          command: |
+            cp ~/circleci-robotframework/*.html ~/circleci-robotframework/results || true
+            cp ~/circleci-robotframework/*.xml ~/circleci-robotframework/results || true
+            cp ~/circleci-robotframework/*.png ~/circleci-robotframework/results || true
+          when: always
+      - store_artifacts:
+          path: ~/circleci-robotframework/results
+          when: always
+      - slack/notify:
+          channel: "test-channel"
+          branch_pattern: main
+          event: pass
+      - slack/notify:
+          channel: "test-job-failure"
+          branch_pattern: main
+          mentions: '@qa'
+          event: fail
+
+workflows:
+  version: 2
+  build-platform:
+    jobs:
+      - build-only:
+          context: onec-staging
+
+  daily-e2e-platform-smoke-test-staging:
+    triggers:
+      - schedule:
+          # at 6am PST weekdays
+          cron: "0 14 * * 1-6"
+          filters:
+            branches:
+              only:
+                - main
+    jobs:
+      - e2e-platform-smoke-test-staging:
+          context: onec-staging
+
+  daily-e2e-platform-smoke-test-prod:
+    triggers:
+      - schedule:
+          # at 9am PST weekdays
+          cron: "0 17 * * 1-5"
+          filters:
+            branches:
+              only:
+                - main
+    jobs:
+      - e2e-platform-smoke-test-prod:
+          context: onec-prod
